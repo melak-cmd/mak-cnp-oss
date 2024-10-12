@@ -1,0 +1,324 @@
+---
+# Source: platform-apps-chart/templates/application.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "-8"
+  name: sx-external-secrets
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/suxess-it/sx-cnp-oss
+    targetRevision: main
+    path: platform-apps/charts/external-secrets
+    helm:
+      valueFiles:
+      - values-k3d.yaml
+      ignoreMissingValueFiles: true
+  destination:
+    namespace: external-secrets
+    server: 'https://kubernetes.default.svc'
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+# Source: platform-apps-chart/templates/application.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "-7"
+  name: sx-crossplane
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/suxess-it/sx-cnp-oss
+    targetRevision: main
+    path: platform-apps/charts/crossplane
+    helm:
+      valueFiles:
+      - values-k3d.yaml
+      ignoreMissingValueFiles: true
+  destination:
+    namespace: crossplane
+    server: 'https://kubernetes.default.svc'
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+# Source: platform-apps-chart/templates/application.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd.argoproj.io/compare-options: ServerSideDiff=true
+    argocd.argoproj.io/sync-wave: "-6"
+  name: sx-k8s-monitoring
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/suxess-it/sx-cnp-oss
+    targetRevision: main
+    path: platform-apps/charts/k8s-monitoring
+    helm:
+      valueFiles:
+      - values-k3d.yaml
+      ignoreMissingValueFiles: true
+  destination:
+    namespace: k8s-monitoring
+    server: 'https://kubernetes.default.svc'
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+---
+# Source: platform-apps-chart/templates/application.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "-5"
+  name: sx-vault
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/suxess-it/sx-cnp-oss
+    targetRevision: main
+    path: platform-apps/charts/vault
+    helm:
+      valueFiles:
+      - values-k3d.yaml
+      ignoreMissingValueFiles: true
+  destination:
+    namespace: vault
+    server: 'https://kubernetes.default.svc'
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+# Source: platform-apps-chart/templates/application.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "-10"
+  name: sx-cert-manager
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/suxess-it/sx-cnp-oss
+    targetRevision: main
+    path: platform-apps/charts/cert-manager
+    helm:
+      valueFiles:
+      - values-k3d.yaml
+      ignoreMissingValueFiles: true
+  destination:
+    namespace: cert-manager
+    server: 'https://kubernetes.default.svc'
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+# Source: platform-apps-chart/templates/application.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "-9"
+  name: sx-argocd
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/suxess-it/sx-cnp-oss
+    targetRevision: main
+    path: platform-apps/charts/argocd
+    helm:
+      valueFiles:
+      - values-k3d.yaml
+      ignoreMissingValueFiles: true
+  destination:
+    namespace: argocd
+    server: 'https://kubernetes.default.svc'
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+# Source: platform-apps-chart/templates/application.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sx-kargo
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/suxess-it/sx-cnp-oss
+    targetRevision: main
+    path: platform-apps/charts/kargo
+    helm:
+      valueFiles:
+      - values-k3d.yaml
+      ignoreMissingValueFiles: true
+  destination:
+    namespace: kargo
+    server: 'https://kubernetes.default.svc'
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+# Source: platform-apps-chart/templates/application.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sx-team-onboarding
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/suxess-it/sx-cnp-oss
+    targetRevision: main
+    path: platform-apps/charts/team-onboarding
+    helm:
+      valueFiles:
+      - values-k3d.yaml
+      ignoreMissingValueFiles: true
+  destination:
+    namespace: argocd
+    server: 'https://kubernetes.default.svc'
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+# Source: platform-apps-chart/templates/application.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sx-argo-rollouts
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/suxess-it/sx-cnp-oss
+    targetRevision: main
+    path: platform-apps/charts/argo-rollouts
+    helm:
+      valueFiles:
+      - values-k3d.yaml
+      ignoreMissingValueFiles: true
+  destination:
+    namespace: argo-rollouts
+    server: 'https://kubernetes.default.svc'
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+# Source: platform-apps-chart/templates/application.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sx-keycloak
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/suxess-it/sx-cnp-oss
+    targetRevision: main
+    path: platform-apps/charts/keycloak
+    helm:
+      valueFiles:
+      - values-k3d.yaml
+      ignoreMissingValueFiles: true
+  destination:
+    namespace: keycloak
+    server: 'https://kubernetes.default.svc'
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+# Source: platform-apps-chart/templates/application.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
+  name: sx-backstage
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/suxess-it/sx-cnp-oss
+    targetRevision: main
+    path: platform-apps/charts/backstage
+    helm:
+      valueFiles:
+      - values-k3d.yaml
+      ignoreMissingValueFiles: true
+  destination:
+    namespace: backstage
+    server: 'https://kubernetes.default.svc'
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
