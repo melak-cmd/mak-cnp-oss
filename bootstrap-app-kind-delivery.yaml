@@ -9,7 +9,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/melak-cmd/mak-cnp-oss
-    targetRevision: main
+    targetRevision: draft
     path: platform-apps/target-chart
     helm:
       valueFiles:
