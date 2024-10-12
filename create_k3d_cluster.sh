@@ -85,6 +85,6 @@ kubectl wait --namespace argocd  --for=condition=ready pod   --selector=app.kube
 
 argocd admin app generate-spec argocd  --repo https://argoproj.github.io/argo-helm --helm-chart argo-cd --revision 7.6.5 --values-literal-file argocd-values.yaml --dest-namespace argocd --dest-server https://kubernetes.default.svc --sync-policy auto --self-heal --auto-prune | kubectl -n argocd create -f -
 
-argocd admin app generate-spec k8s-monitoring  --repo https://grafana.github.io/helm-charts --helm-chart k8s-monitoring --revision 1.5.4 --values-literal-file k8s-monitoring-values.yaml --dest-namespace k8s-monitoring --dest-server https://kubernetes.default.svc --sync-policy auto --self-heal --auto-prune | kubectl -n k8s-monitoring create -f -
+argocd admin app generate-spec crossplane  --repo https://charts.crossplane.io/stable --helm-chart crossplane --revision 1.17.1 --values-literal-file crossplane-values.yaml --dest-namespace crossplane --dest-server https://kubernetes.default.svc --sync-policy auto --self-heal --auto-prune --sync-option "CreateNamespace=true" | kubectl -n argocd apply -f -
 
 echo "All operations completed successfully."
