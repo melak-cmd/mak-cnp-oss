@@ -54,7 +54,7 @@ fi
 # create argocd with helm chart not with install.yaml
 # because afterwards argocd is also managed by itself with the helm-chart
 
-helm install sx-argocd argo-cd \
+helm install mak-argocd argo-cd \
   --repo https://argoproj.github.io/argo-helm \
   --version 7.1.3 \
   --namespace argocd \
@@ -74,8 +74,8 @@ CURRENT_BRANCH_SED=$( echo ${CURRENT_BRANCH} | sed 's/\//\\\//g' )
 CURRENT_REPOSITORY_SED=$( echo ${CURRENT_REPOSITORY} | sed 's/\//\\\//g' )
 
 # bootstrap-app
-curl -L https://raw.githubusercontent.com/${CURRENT_REPOSITORY}/${CURRENT_BRANCH}/bootstrap-app-$(echo ${TARGET_TYPE} | awk '{print tolower($0)}').yaml | sed "s/targetRevision: main/targetRevision: ${CURRENT_BRANCH_SED}/g" | sed "s/suxess-it\/sx-cnp-oss/${CURRENT_REPOSITORY_SED}/g" | kubectl apply -n argocd -f -
-
+curl -L https://raw.githubusercontent.com/${CURRENT_REPOSITORY}/${CURRENT_BRANCH}/bootstrap-app-$(echo ${TARGET_TYPE} | awk '{print tolower($0)}').yaml | sed "s/targetRevision: main/targetRevision: ${CURRENT_BRANCH_SED}/g" | sed "s/melak-cmd\/mak-cnp-oss/${CURRENT_REPOSITORY_SED}/g" | kubectl apply -n argocd -f -
+exit
 # create app list
 URL=https://raw.githubusercontent.com/${CURRENT_REPOSITORY}/${CURRENT_BRANCH}/platform-apps/target-chart/values-$(echo ${TARGET_TYPE} | awk '{print tolower($0)}').yaml
 
