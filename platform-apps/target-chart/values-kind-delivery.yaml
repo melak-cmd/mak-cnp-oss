@@ -2,7 +2,7 @@ default:
   valueFiles:
   - values-k3d.yaml
 
-# applications:
+applications:
 
 #   - name: external-secrets
 #     annotations:
