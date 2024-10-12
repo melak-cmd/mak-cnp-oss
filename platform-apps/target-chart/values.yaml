@@ -1,0 +1,5 @@
+default:
+  repoURL: https://github.com/melak-cmd/mak-cnp-oss
+  targetRevision: draft
+  valueFiles: []
+applications: ~
