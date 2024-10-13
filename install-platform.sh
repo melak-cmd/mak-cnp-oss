@@ -2,66 +2,71 @@
 
 set -x
 
-if [ "${CREATE_K3D_CLUSTER}" == true ] ; then
-  # do we need to set this always? I had DNS issues on the train
-  export K3D_FIX_DNS=1
+# Get the hostname of the local machine and convert it to lowercase
+# CLUSTER_NAME="$(hostname | tr '[:upper:]' '[:lower:]')"
+
+# if [ "${CREATE_K3D_CLUSTER}" == true ] ; then
+#   # do we need to set this always? I had DNS issues on the train
+#   export K3D_FIX_DNS=1
   
-  k3d cluster create cnp-local-demo \
-    -p "80:80@loadbalancer" \
-    -p "443:443@loadbalancer" \
-    --k3s-arg '--cluster-init@server:0' \
-    --k3s-arg '--etcd-expose-metrics=true@server:0' \
-    --agents 2 \
-    --wait
-fi
+#   k3d cluster create "$CLUSTER_NAME" \
+#     -p "80:80@loadbalancer" \
+#     -p "443:443@loadbalancer" \
+#     --k3s-arg '--cluster-init@server:0' \
+#     --k3s-arg '--etcd-expose-metrics=true@server:0' \
+#     --agents 2 \
+#     --wait
+# fi
 
-if [[ "${TARGET_TYPE}" =~ ^KIND.* ]] ; then
-  # create mkcert certs in alle namespaces with ingress
-  for namespace in backstage kargo grafana argocd keycloak komoplane kubecost falco minio velero velero-ui vault; do
-    kubectl create namespace ${namespace}
-    mkcert -cert-file ${namespace}-cert.pem -key-file ${namespace}-key.pem ${namespace}-127-0-0-1.nip.io
-    # kargo needs a special secret name according to its helm chart
-    if [ "${namespace}" = "kargo" ]; then
-      kubectl create secret tls kargo-api-ingress-cert -n ${namespace} --cert=${namespace}-cert.pem --key=${namespace}-key.pem
-    else
-      kubectl create secret tls ${namespace}-server-tls -n ${namespace} --cert=${namespace}-cert.pem --key=${namespace}-key.pem
-    fi
-    # minioconsole needs additional secret
-    if [ "${namespace}" = "minio" ]; then
-      mkcert -cert-file ${namespace}-console-cert.pem -key-file ${namespace}-console-key.pem minio-console-127-0-0-1.nip.io
-      kubectl create secret tls minio-console-tls -n ${namespace} --cert=${namespace}-console-cert.pem --key=${namespace}-console-key.pem
-      rm ${namespace}-console-cert.pem ${namespace}-console-key.pem
-    fi
-    rm ${namespace}-cert.pem ${namespace}-key.pem
-  done
+# kubectl wait --namespace kube-system   --for=condition=ready pod   --selector=k8s-app=kube-dns   --timeout=90s
 
-  # do not install kind nginx-controller and metrics-server on k3d cluster
-  # since kind nginx only works on kind cluster and metrics-server is already installed on k3d
-  if [[ ${CREATE_K3D_CLUSTER} != true ]] ; then
-    # and install nginx ingress-controller
-    kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
-    kubectl wait --namespace ingress-nginx \
-      --for=condition=ready pod \
-      --selector=app.kubernetes.io/component=controller \
-      --timeout=90s
+# if [[ "${TARGET_TYPE}" =~ ^KIND.* ]] ; then
+#   # create mkcert certs in alle namespaces with ingress
+#   for namespace in backstage kargo grafana argocd keycloak komoplane kubecost falco minio velero velero-ui vault; do
+#     kubectl create namespace ${namespace}
+#     mkcert -cert-file ${namespace}-cert.pem -key-file ${namespace}-key.pem ${namespace}-127-0-0-1.nip.io
+#     # kargo needs a special secret name according to its helm chart
+#     if [ "${namespace}" = "kargo" ]; then
+#       kubectl create secret tls kargo-api-ingress-cert -n ${namespace} --cert=${namespace}-cert.pem --key=${namespace}-key.pem
+#     else
+#       kubectl create secret tls ${namespace}-server-tls -n ${namespace} --cert=${namespace}-cert.pem --key=${namespace}-key.pem
+#     fi
+#     # minioconsole needs additional secret
+#     if [ "${namespace}" = "minio" ]; then
+#       mkcert -cert-file ${namespace}-console-cert.pem -key-file ${namespace}-console-key.pem minio-console-127-0-0-1.nip.io
+#       kubectl create secret tls minio-console-tls -n ${namespace} --cert=${namespace}-console-cert.pem --key=${namespace}-console-key.pem
+#       rm ${namespace}-console-cert.pem ${namespace}-console-key.pem
+#     fi
+#     rm ${namespace}-cert.pem ${namespace}-key.pem
+#   done
 
-    helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server/
-    helm repo update
-    helm upgrade --install --set args={--kubelet-insecure-tls} metrics-server metrics-server/metrics-server --namespace kube-system
-  fi
-fi
+#   # do not install kind nginx-controller and metrics-server on k3d cluster
+#   # since kind nginx only works on kind cluster and metrics-server is already installed on k3d
+#   if [[ ${CREATE_K3D_CLUSTER} != true ]] ; then
+#     # and install nginx ingress-controller
+#     kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+#     kubectl wait --namespace ingress-nginx \
+#       --for=condition=ready pod \
+#       --selector=app.kubernetes.io/component=controller \
+#       --timeout=90s
+
+#     helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server/
+#     helm repo update
+#     helm upgrade --install --set args={--kubelet-insecure-tls} metrics-server metrics-server/metrics-server --namespace kube-system
+#   fi
+# fi
 
 # create argocd with helm chart not with install.yaml
 # because afterwards argocd is also managed by itself with the helm-chart
 
-helm install mak-argocd argo-cd \
-  --repo https://argoproj.github.io/argo-helm \
-  --version 7.1.3 \
-  --namespace argocd \
-  --create-namespace \
-  --set configs.cm.application.resourceTrackingMethod=annotation \
-  -f https://raw.githubusercontent.com/${CURRENT_REPOSITORY}/${CURRENT_BRANCH}/bootstrap-argocd-values.yaml \
-  --wait
+# helm install mak-argocd argo-cd \
+#   --repo https://argoproj.github.io/argo-helm \
+#   --version 7.1.3 \
+#   --namespace argocd \
+#   --create-namespace \
+#   --set configs.cm.application.resourceTrackingMethod=annotation \
+#   -f https://raw.githubusercontent.com/${CURRENT_REPOSITORY}/${CURRENT_BRANCH}/bootstrap-argocd-values.yaml \
+#   --wait
 
 # create secret for scm applicationset in team app definition namespaces
 # see https://github.com/suxess-it/sx-cnp-oss/issues/214 for a sustainable solution
@@ -75,13 +80,13 @@ CURRENT_REPOSITORY_SED=$( echo ${CURRENT_REPOSITORY} | sed 's/\//\\\//g' )
 
 # bootstrap-app
 curl -L https://raw.githubusercontent.com/${CURRENT_REPOSITORY}/${CURRENT_BRANCH}/bootstrap-app-$(echo ${TARGET_TYPE} | awk '{print tolower($0)}').yaml | sed "s/targetRevision: main/targetRevision: ${CURRENT_BRANCH_SED}/g" | sed "s/melak-cmd\/mak-cnp-oss/${CURRENT_REPOSITORY_SED}/g" | kubectl apply -n argocd -f -
-exit
+
 # create app list
 URL=https://raw.githubusercontent.com/${CURRENT_REPOSITORY}/${CURRENT_BRANCH}/platform-apps/target-chart/values-$(echo ${TARGET_TYPE} | awk '{print tolower($0)}').yaml
 
-argocd_apps=$(curl -L $URL | awk '/^  - name:/ { printf "%s", "sx-"$3" "}' )
+argocd_apps=$(curl -L $URL | awk '/^  - name:/ { printf "%s", "mak-"$3" "}' )
 # list apps which need some sort of special treatment in bootstrap
-argocd_apps_without_individual=$(curl -L $URL | egrep -Ev "backstage|kargo" | awk '/^  - name:/ { printf "%s", "sx-"$3" "}' )
+argocd_apps_without_individual=$(curl -L $URL | egrep -Ev "backstage|kargo" | awk '/^  - name:/ { printf "%s", "mak-"$3" "}' )
 
 # max wait for 20 minutes
 max_wait_time=1200
@@ -120,7 +125,7 @@ fi
 
 # apply argocd-secret to set a secretKey
 kubectl apply -f https://raw.githubusercontent.com/${CURRENT_REPOSITORY}/${CURRENT_BRANCH}/platform-apps/charts/argocd/manual-secret/argocd-secret.yaml
-
+exit
 # if kargo is part of this stack, upload token to vault
 if [[ $( echo $argocd_apps | grep sx-kargo ) ]] ; then
   echo "adding special configuration for sx-kargo"
