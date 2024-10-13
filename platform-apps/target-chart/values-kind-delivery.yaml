@@ -4,9 +4,9 @@ default:
 
 applications:
 
-  # - name: external-secrets
-  #   annotations:
-  #     argocd.argoproj.io/sync-wave: "-8"
+  - name: external-secrets
+    annotations:
+      argocd.argoproj.io/sync-wave: "-8"
 
   - name: crossplane
     annotations:
@@ -19,13 +19,13 @@ applications:
     syncOptions:
       - ServerSideApply=true
 
-  # - name: vault
-  #   annotations:
-  #     argocd.argoproj.io/sync-wave: "-5"
+  - name: vault
+    annotations:
+      argocd.argoproj.io/sync-wave: "-5"
 
-  # - name: cert-manager
-  #   annotations:
-  #     argocd.argoproj.io/sync-wave: "-10"
+  - name: cert-manager
+    annotations:
+      argocd.argoproj.io/sync-wave: "-10"
 
   - name: argocd
     annotations:
