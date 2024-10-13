@@ -38,7 +38,7 @@ applications:
 
   # - name: argo-rollouts
 
-  - name: keycloak
+  # - name: keycloak
 
 #   - name: backstage
 #     annotations:
