@@ -69,7 +69,7 @@ set -x
 #   --wait
 
 # create secret for scm applicationset in team app definition namespaces
-# see https://github.com/suxess-it/sx-cnp-oss/issues/214 for a sustainable solution
+# see https://github.com/suxess-it/mak-cnp-oss/issues/214 for a sustainable solution
 #for ns in adn-team1 adn-team2 adn-team-a; do
 #  kubectl create namespace ${ns}
 #  kubectl create secret generic appset-github-token --from-literal=token=${KUBRIX_GITHUB_APPSET_TOKEN} -n ${ns}
@@ -125,17 +125,17 @@ fi
 
 # apply argocd-secret to set a secretKey
 kubectl apply -f https://raw.githubusercontent.com/${CURRENT_REPOSITORY}/${CURRENT_BRANCH}/platform-apps/charts/argocd/manual-secret/argocd-secret.yaml
-exit
+
 # if kargo is part of this stack, upload token to vault
-if [[ $( echo $argocd_apps | grep sx-kargo ) ]] ; then
-  echo "adding special configuration for sx-kargo"
+if [[ $( echo $argocd_apps | grep mak-kargo ) ]] ; then
+  echo "adding special configuration for mak-kargo"
   export VAULT_HOSTNAME=$(kubectl get ingress -o jsonpath='{.items[*].spec.rules[*].host}' -n vault)
-  curl -k --header "X-Vault-Token:$(kubectl get secret -n vault vault-init -o=jsonpath='{.data.root_token}'  | base64 -d)" --request POST --data "{\"data\": {\"GITHUB_APPSET_PAT\": \"$VAULT_TOKEN\", \"GITHUB_TOKEN\": \"$VAULT_TOKEN\", \"GITHUB_USERNAME\": \"jkleinlercher\"}}" https://${VAULT_HOSTNAME}/v1/sx-cnp-oss-kv/data/demo/delivery
+  curl -k --header "X-Vault-Token:$(kubectl get secret -n vault vault-init -o=jsonpath='{.data.root_token}'  | base64 -d)" --request POST --data "{\"data\": {\"GITHUB_APPSET_PAT\": \"$VAULT_TOKEN\", \"GITHUB_TOKEN\": \"$VAULT_TOKEN\", \"GITHUB_USERNAME\": \"jkleinlercher\"}}" https://${VAULT_HOSTNAME}/v1/mak-cnp-oss-kv/data/demo/delivery
   sleep 10
   kubectl delete ExternalSecret github-creds -n kargo
   # check if kargo is already synced 
   # max wait for 5 minutes
-  argocd_app_individual="sx-kargo"
+  argocd_app_individual="mak-kargo"
 
   max_wait_time=900
   start=$SECONDS
@@ -173,8 +173,8 @@ if [[ $( echo $argocd_apps | grep sx-kargo ) ]] ; then
 fi
 
 # if backstage is part of this stack, create the manual secret for backstage
-if [[ $( echo $argocd_apps | grep sx-backstage ) ]] ; then
-echo "adding special configuration for sx-backstage"
+if [[ $( echo $argocd_apps | grep mak-backstage ) ]] ; then
+echo "adding special configuration for mak-backstage"
   # get hostnames
   # gethostnames from ingress - to remove TARGET_TYPE 
   export ARGOCD_HOSTNAME=$(kubectl get ingress -o jsonpath='{.items[*].spec.rules[*].host}' -n argocd)
@@ -194,7 +194,7 @@ echo "adding special configuration for sx-backstage"
 
   # check if backstage is already synced (it will still be degraded because of the missing secret we create in the next step)
   # max wait for 5 minutes
-  argocd_app_individual="sx-backstage"
+  argocd_app_individual="mak-backstage"
 
   max_wait_time=900
   start=$SECONDS
@@ -245,10 +245,10 @@ echo "adding special configuration for sx-backstage"
       --from-literal=APP_CONFIG_backend_cors_origin=${BACKSTAGE_CODESPACE_URL} \
       --from-literal=APP_CONFIG_auth_providers_oidc_development_callbackUrl=${BACKSTAGE_CODESPACE_URL}/api/auth/oidc/handler/frame \
       --from-literal=APP_CONFIG_auth_providers_oidc_development_clientId=backstage-codespaces \
-      --from-literal=APP_CONFIG_auth_providers_oidc_development_metadataUrl=http://keycloak-service.keycloak.svc.cluster.local:8080/realms/sx-cnp-oss-codespaces \
+      --from-literal=APP_CONFIG_auth_providers_oidc_development_metadataUrl=http://keycloak-service.keycloak.svc.cluster.local:8080/realms/mak-cnp-oss-codespaces \
       --from-literal=APP_CONFIG_auth_provider_github_development_callbackUrl=${BACKSTAGE_CODESPACE_URL}/api/auth/github/handler/frame \
-      --from-literal=APP_CONFIG_catalog_providers_keycloakOrg_default_loginRealm=sx-cnp-oss-codespaces \
-      --from-literal=APP_CONFIG_catalog_providers_keycloakOrg_default_realm=sx-cnp-oss-codespaces \
+      --from-literal=APP_CONFIG_catalog_providers_keycloakOrg_default_loginRealm=mak-cnp-oss-codespaces \
+      --from-literal=APP_CONFIG_catalog_providers_keycloakOrg_default_realm=mak-cnp-oss-codespaces \
       --from-literal=APP_CONFIG_catalog_providers_keycloakOrg_default_clientId=backstage-codespaces \
       --from-literal=APP_CONFIG_catalog_providers_keycloakOrg_default_clientSecret=demosecret
 
