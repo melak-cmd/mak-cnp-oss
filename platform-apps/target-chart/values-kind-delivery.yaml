@@ -4,9 +4,9 @@ default:
 
 applications:
 
-#   - name: external-secrets
-#     annotations:
-#       argocd.argoproj.io/sync-wave: "-8"
+  - name: external-secrets
+    annotations:
+      argocd.argoproj.io/sync-wave: "-8"
 
   - name: crossplane
     annotations:
@@ -23,9 +23,9 @@ applications:
 #     annotations:
 #       argocd.argoproj.io/sync-wave: "-5"
 
-#   - name: cert-manager
-#     annotations:
-#       argocd.argoproj.io/sync-wave: "-10"
+  - name: cert-manager
+    annotations:
+      argocd.argoproj.io/sync-wave: "-10"
 
   - name: argocd
     annotations:
@@ -36,7 +36,7 @@ applications:
 #   - name: team-onboarding
 #     destinationNamespaceOverwrite: argocd
 
-#   - name: argo-rollouts
+  - name: argo-rollouts
 
 #   - name: keycloak
 
