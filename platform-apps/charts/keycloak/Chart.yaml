@@ -1,6 +1,6 @@
 apiVersion: v2
-name: mak-argo-rollouts
-description: A Helm chart for Kubernetes
+name: mak-keycloak
+description: A local k8s keycloak with postgres db
 
 # A chart can be either an 'application' or a 'library' chart.
 #
@@ -23,7 +23,3 @@ version: 0.1.0
 # It is recommended to use it with quotes.
 appVersion: "1.0.0"
 
-dependencies:
-  - name: argo-rollouts
-    version: 2.37.7
-    repository: https://argoproj.github.io/argo-helm

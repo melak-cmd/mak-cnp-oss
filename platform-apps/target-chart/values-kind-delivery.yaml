@@ -19,9 +19,9 @@ applications:
 #     syncOptions:
 #       - ServerSideApply=true
 
-#   - name: vault
-#     annotations:
-#       argocd.argoproj.io/sync-wave: "-5"
+  - name: vault
+    annotations:
+      argocd.argoproj.io/sync-wave: "-5"
 
   - name: cert-manager
     annotations:
@@ -38,7 +38,7 @@ applications:
 
   - name: argo-rollouts
 
-#   - name: keycloak
+  - name: keycloak
 
 #   - name: backstage
 #     annotations:
