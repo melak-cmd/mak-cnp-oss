@@ -2,13 +2,14 @@ crossplane:
 
   provider:
     # -- A list of Provider packages to install.
-    packages: []
-  
+    packages: 
+    - xpkg.upbound.io/crossplane-contrib/provider-kubernetes:v0.15.0
+
   configuration:
     # -- A list of Configuration packages to install.
     packages: []
-  
+
   function:
     # -- A list of Function packages to install
     packages: 
-    - xpkg.upbound.io/crossplane-contrib/function-kcl:v0.2.0
+    - xpkg.upbound.io/crossplane-contrib/function-kcl:v0.10.3
