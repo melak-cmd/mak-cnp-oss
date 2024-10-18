@@ -15,4 +15,4 @@ crossplane:
   function:
     # -- A list of Function packages to install
     packages: 
-    - xpkg.upbound.io/crossplane-contrib/function-kcl:v0.10.3
+    - xpkg.upbound.io/crossplane-contrib/function-kcl:latest
