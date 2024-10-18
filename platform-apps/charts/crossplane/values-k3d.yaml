@@ -4,6 +4,8 @@ crossplane:
     # -- A list of Provider packages to install.
     packages: 
     - xpkg.upbound.io/crossplane-contrib/provider-kubernetes:v0.15.0
+    - xpkg.upbound.io/crossplane-contrib/provider-helm:v0.19.0
+    - xpkg.upbound.io/crossplane-contrib/provider-argocd:v0.9.1
 
   configuration:
     # -- A list of Configuration packages to install.
