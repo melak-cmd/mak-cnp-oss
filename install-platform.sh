@@ -22,12 +22,12 @@ else
     # Create a K3D cluster
     echo -e "${GREEN}Creating cluster '$CLUSTER_NAME'...${NC}"
     k3d cluster create "$CLUSTER_NAME" \
-      -p "80:80@loadbalancer" \  # Map port 80
-      -p "443:443@loadbalancer" \  # Map port 443
-      --k3s-arg '--cluster-init@server:0' \  # Initialize the cluster
-      --k3s-arg '--etcd-expose-metrics=true@server:0' \  # Expose etcd metrics
-      --agents 2 \  # Create 2 agent nodes
-      --wait  # Wait for the cluster to be ready
+      -p "80:80@loadbalancer" \
+      -p "443:443@loadbalancer" \
+      --k3s-arg '--cluster-init@server:0' \
+      --k3s-arg '--etcd-expose-metrics=true@server:0' \
+      --agents 2 \
+      --wait
   fi
 fi
 
@@ -48,6 +48,23 @@ helm install mak-argocd argo-cd \
   --set configs.cm.application.resourceTrackingMethod=annotation \
   -f https://raw.githubusercontent.com/${CURRENT_REPOSITORY}/${CURRENT_BRANCH}/bootstrap-argocd-values.yaml \
   --wait
+
+# Prepare variables for sed replacements
+CURRENT_BRANCH_SED=$( echo ${CURRENT_BRANCH} | sed 's/\//\\\//g' )
+CURRENT_REPOSITORY_SED=$( echo ${CURRENT_REPOSITORY} | sed 's/\//\\\//g' )
+
+# Bootstrap application
+echo -e "${GREEN}Bootstrapping application...${NC}"
+curl -L https://raw.githubusercontent.com/${CURRENT_REPOSITORY}/${CURRENT_BRANCH}/bootstrap-app-$(echo ${TARGET_TYPE} | awk '{print tolower($0)}').yaml | \
+sed "s/targetRevision: main/targetRevision: ${CURRENT_BRANCH_SED}/g" | \
+sed "s/melak-cmd\/mak-cnp-oss/${CURRENT_REPOSITORY_SED}/g" | \
+kubectl apply -n argocd -f -
+
+# Create app list
+URL=https://raw.githubusercontent.com/${CURRENT_REPOSITORY}/${CURRENT_BRANCH}/platform-apps/target-chart/values-$(echo ${TARGET_TYPE} | awk '{print tolower($0)}').yaml
+
+# Optional: You can use this URL for further processing if needed
+echo -e "${GREEN}App list URL: ${URL}${NC}"
 
 # Check if the TARGET_TYPE matches
 if [[ "${TARGET_TYPE}" =~ ^KIND.* ]]; then
@@ -90,12 +107,3 @@ if [[ "${TARGET_TYPE}" =~ ^KIND.* ]]; then
     helm upgrade --install --set args={--kubelet-insecure-tls} metrics-server metrics-server/metrics-server --namespace kube-system
   fi
 fi
-
-CURRENT_BRANCH_SED=$( echo ${CURRENT_BRANCH} | sed 's/\//\\\//g' )
-CURRENT_REPOSITORY_SED=$( echo ${CURRENT_REPOSITORY} | sed 's/\//\\\//g' )
-
-# bootstrap-app
-curl -L https://raw.githubusercontent.com/${CURRENT_REPOSITORY}/${CURRENT_BRANCH}/bootstrap-app-$(echo ${TARGET_TYPE} | awk '{print tolower($0)}').yaml | sed "s/targetRevision: main/targetRevision: ${CURRENT_BRANCH_SED}/g" | sed "s/melak-cmd\/mak-cnp-oss/${CURRENT_REPOSITORY_SED}/g" | kubectl apply -n argocd -f -
-
-# # create app list
-URL=https://raw.githubusercontent.com/${CURRENT_REPOSITORY}/${CURRENT_BRANCH}/platform-apps/target-chart/values-$(echo ${TARGET_TYPE} | awk '{print tolower($0)}').yaml
