@@ -1,6 +1,6 @@
 argo-cd:
   global:
-    domain: argocd.127.0.0.1.nip.io
+    domain: argocd.traefik.me
   configs:
     params:
       server.insecure: true
@@ -55,7 +55,7 @@ argo-cd:
         cert-manager.io/issuer: "letsencrypt-issuer"
       extraTls:
         - hosts:
-            - argocd.127.0.0.1.nip.io
+            - argocd.traefik.me
           # Based on the ingress controller used secret might be optional
           secretName: argocd-server-tls
     extensions:
