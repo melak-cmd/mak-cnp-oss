@@ -51,6 +51,7 @@ argo-cd:
       annotations:
         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
         nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+        cert-manager.io/cluster-issuer: "letsencrypt-staging"
       extraTls:
         - hosts:
             - argocd-127-0-0-1.nip.io
@@ -81,17 +82,3 @@ argo-cd:
       enabled: true
       serviceMonitor:
         enabled: true
-  extraObjects:
-    - apiVersion: cert-manager.io/v1
-      kind: Certificate
-      metadata:
-        name: argocd-server-tls
-        namespace: argocd
-      spec:
-        secretName: argocd-server-tls
-        issuerRef:
-          name: letsencrypt-staging
-          kind: ClusterIssuer
-        commonName: argocd-127-0-0-1.nip.io
-        dnsNames:
-          - argocd-127-0-0-1.nip.io
