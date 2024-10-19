@@ -52,7 +52,7 @@ argo-cd:
         kubernetes.io/ingress.class: "traefik"
         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
         nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-        cert-manager.io/cluster-issuer: "letsencrypt-staging"
+        cert-manager.io/issuer: "letsencrypt-issuer"
       extraTls:
         - hosts:
             - argocd.127.0.0.1.nip.io
