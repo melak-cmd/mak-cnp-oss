@@ -65,7 +65,7 @@ URL=https://raw.githubusercontent.com/${CURRENT_REPOSITORY}/${CURRENT_BRANCH}/pl
 
 # Optional: You can use this URL for further processing if needed
 echo -e "${GREEN}App list URL: ${URL}${NC}"
-
+exit
 # Check if the TARGET_TYPE matches
 if [[ "${TARGET_TYPE}" =~ ^KIND.* ]]; then
   # Create mkcert certs in all namespaces with ingress
