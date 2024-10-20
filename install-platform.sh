@@ -40,14 +40,19 @@ kubectl wait --namespace kube-system \
 
 # Install ArgoCD using Helm chart
 echo -e "${GREEN}Installing ArgoCD with Helm chart...${NC}"
-helm install mak-argocd argo-cd \
+kubectl create namespace argocd
+helm template mak-argocd argo-cd \
   --repo https://argoproj.github.io/argo-helm \
   --version 7.1.3 \
   --namespace argocd \
-  --create-namespace \
   --set configs.cm.application.resourceTrackingMethod=annotation \
-  -f https://raw.githubusercontent.com/${CURRENT_REPOSITORY}/${CURRENT_BRANCH}/bootstrap-argocd-values.yaml \
-  --wait
+  -f https://raw.githubusercontent.com/${CURRENT_REPOSITORY}/${CURRENT_BRANCH}/bootstrap-argocd-values.yaml |
+  kubectl -n argocd create -f -
+
+kubectl wait --namespace argocd \
+  --for=condition=ready pod \
+  --selector=app.kubernetes.io/component=server \
+  --timeout=90s
 
 # Prepare variables for sed replacements
 CURRENT_BRANCH_SED=$( echo ${CURRENT_BRANCH} | sed 's/\//\\\//g' )
