@@ -4,13 +4,13 @@ default:
 
 applications:
 
-  # - name: external-secrets
-  #   annotations:
-  #     argocd.argoproj.io/sync-wave: "-8"
+  - name: external-secrets
+    annotations:
+      argocd.argoproj.io/sync-wave: "-8"
 
-  # - name: crossplane
-  #   annotations:
-  #     argocd.argoproj.io/sync-wave: "-7"
+  - name: crossplane
+    annotations:
+      argocd.argoproj.io/sync-wave: "-7"
 
   # - name: k8s-monitoring
   #   annotations:
