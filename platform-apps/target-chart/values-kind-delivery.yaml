@@ -4,13 +4,13 @@ default:
 
 applications:
 
-  - name: external-secrets
-    annotations:
-      argocd.argoproj.io/sync-wave: "-8"
+  # - name: external-secrets
+  #   annotations:
+  #     argocd.argoproj.io/sync-wave: "-8"
 
-  - name: crossplane
-    annotations:
-      argocd.argoproj.io/sync-wave: "-7"
+  # - name: crossplane
+  #   annotations:
+  #     argocd.argoproj.io/sync-wave: "-7"
 
   # - name: k8s-monitoring
   #   annotations:
@@ -19,24 +19,24 @@ applications:
   #   syncOptions:
   #     - ServerSideApply=true
 
-  - name: vault
-    annotations:
-      argocd.argoproj.io/sync-wave: "-5"
+  # - name: vault
+  #   annotations:
+  #     argocd.argoproj.io/sync-wave: "-5"
 
-  - name: cert-manager
-    annotations:
-      argocd.argoproj.io/sync-wave: "-10"
+  # - name: cert-manager
+  #   annotations:
+  #     argocd.argoproj.io/sync-wave: "-10"
 
   - name: argocd
     annotations:
       argocd.argoproj.io/sync-wave: "-9"
 
-  - name: kargo
+  # - name: kargo
 
   # - name: team-onboarding
   #   destinationNamespaceOverwrite: argocd
 
-  - name: argo-rollouts
+  # - name: argo-rollouts
 
   # - name: keycloak
 
