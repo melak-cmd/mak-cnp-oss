@@ -1,6 +1,6 @@
 argo-cd:
   global:
-    domain: argocd.traefik.me
+    domain: argocd.127.0.0.1.nip.io
   configs:
     params:
       server.insecure: true
@@ -52,10 +52,9 @@ argo-cd:
         kubernetes.io/ingress.class: "traefik"
         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
         nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-        cert-manager.io/issuer: "letsencrypt-issuer"
       extraTls:
         - hosts:
-            - argocd.traefik.me
+            - argocd.127.0.0.1.nip.io
           # Based on the ingress controller used secret might be optional
           secretName: argocd-server-tls
     extensions:
