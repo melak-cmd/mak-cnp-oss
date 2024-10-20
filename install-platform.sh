@@ -31,6 +31,8 @@ else
   fi
 fi
 
+sleep 2
+
 # Wait for the kube-dns pod to be ready
 echo -e "${GREEN}Waiting for kube-dns pod to be ready...${NC}"
 kubectl wait --namespace kube-system \
