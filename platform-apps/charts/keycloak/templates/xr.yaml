@@ -31,7 +31,7 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: "-1"
 spec:
-  providerConfigName: sx-keycloak-config
+  providerConfigName: mak-keycloak-config
   providerSecretName: keycloak-credentials-cp
   realm: {{ .Values.deployments.keycloak.realm.realmid }}
   builtinClients: 
