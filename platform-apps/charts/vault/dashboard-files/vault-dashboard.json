@@ -106,7 +106,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "max by (job) (up{job=\"mak-vault-active\"})",
+          "expr": "max by (job) (up{job=\"sx-vault-active\"})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -4403,7 +4403,7 @@
           "type": "prometheus",
           "uid": "${datasource}"
         },
-        "definition": "label_values(up{job=\"mak-vault-active\"},instance)",
+        "definition": "label_values(up{job=\"sx-vault-active\"},instance)",
         "hide": 2,
         "includeAll": false,
         "label": "Host:",
@@ -4412,7 +4412,7 @@
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(up{job=\"mak-vault-active\"},instance)",
+          "query": "label_values(up{job=\"sx-vault-active\"},instance)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
@@ -4434,7 +4434,7 @@
           "type": "prometheus",
           "uid": "${datasource}"
         },
-        "definition": "label_values(up{job=\"mak-vault-active\", instance=~\"$node:(.*)\"},instance)",
+        "definition": "label_values(up{job=\"sx-vault-active\", instance=~\"$node:(.*)\"},instance)",
         "hide": 2,
         "includeAll": false,
         "multi": false,
@@ -4442,7 +4442,7 @@
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(up{job=\"mak-vault-active\", instance=~\"$node:(.*)\"},instance)",
+          "query": "label_values(up{job=\"sx-vault-active\", instance=~\"$node:(.*)\"},instance)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
