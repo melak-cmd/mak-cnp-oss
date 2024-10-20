@@ -1,5 +1,5 @@
 apiVersion: v2
-name: mak-external-secrets
+name: sx-external-secrets
 description: A Helm chart for ESO
 
 # A chart can be either an 'application' or a 'library' chart.

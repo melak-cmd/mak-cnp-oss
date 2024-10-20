@@ -27,7 +27,7 @@ spec:
     oidcClientId: vault
     defaultRole: default
     oidcClientSecretSecretRef:
-      name: mak-vault-demosecret
+      name: sx-vault-demosecret
       key: demosecret
       namespace: vault
     type: oidc

@@ -1,10 +1,10 @@
 eso:
-  providerUrl: "http://sx-vault-active.vault.svc.cluster.local:8200"
+  providerUrl: "https://vault.lab.suxessit.k8s.cloud.uibk.ac.at/"
   backendName: vault-backend
   secretStore: sx-cnp-oss-kv
   # oidc config
-  oidcDiscoveryUrl: https://keycloak-127-0-0-1.nip.io/realms/sx-cnp-oss
-  callbackUri: "https://vault-127-0-0-1.nip.io"
+  oidcDiscoveryUrl: "https://keycloak.lab.suxessit.k8s.cloud.uibk.ac.at/realms/sx-cnp-oss"
+  callbackUri: "https://vault.lab.suxessit.k8s.cloud.uibk.ac.at"
 
   # Copyright (c) HashiCorp, Inc.
   # SPDX-License-Identifier: MPL-2.0
@@ -14,13 +14,19 @@ vault:
   server:
     ingress:
       enabled: true
+      ingressClassName: nginx
+      annotations:
+        cert.gardener.cloud/purpose: managed
+        dns.gardener.cloud/class: garden
+        dns.gardener.cloud/dnsnames: vault.lab.suxessit.k8s.cloud.uibk.ac.at
+        dns.gardener.cloud/ttl: "180"      
       hosts:
-        - host: vault-127-0-0-1.nip.io
+        - host: vault.lab.suxessit.k8s.cloud.uibk.ac.at
           paths: []
       tls: 
         - secretName: vault-server-tls
           hosts:
-            - vault-127-0-0-1.nip.io
+            - vault.lab.suxessit.k8s.cloud.uibk.ac.at
     extraInitContainers:
       - name: utility-downloader
         image: alpine/curl:latest
@@ -223,11 +229,11 @@ vault:
       size: 1Gi
     auditStorage:
       enabled: true
-      size: 1Gi
+      size: 5Gi
     affinity: {}
     ha:
       enabled: true
-      replicas: 1
+      replicas: 3
       raft:
         enabled: true
         setNodeId: true

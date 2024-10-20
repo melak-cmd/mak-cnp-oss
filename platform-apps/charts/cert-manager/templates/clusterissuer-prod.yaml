@@ -4,7 +4,7 @@ metadata:
   name: letsencrypt-prod
 spec:
   acme:
-    email: amine.kawani@outlook.com
+    email: support@suxess-it.com
     preferredChain: ''
     privateKeySecretRef:
       name: letsencrypt-prod

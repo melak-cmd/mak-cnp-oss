@@ -1,6 +1,6 @@
 argo-cd:
   global:
-    domain: argocd-127-0-0-1.nip.io
+    domain: argocd-metalstack.platform-engineer.cloud
 
   configs:
     params:
@@ -35,33 +35,17 @@ argo-cd:
       policy.csv: |
         p, backstage, applications, get, */*, allow
 
-  controller:
-    metrics:
-      enabled: true
-      serviceMonitor: 
-        enabled: true     
-
-  dex:
-    metrics:
-      enabled: true
-      serviceMonitor: 
-        enabled: true
-     
-  redis:
-    metrics:
-      enabled: true
-      serviceMonitor: 
-        enabled: true 
-
   server:
     ingress:
+      ingressClassName: nginx
       enabled: true
       annotations: 
         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
         nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+        cert-manager.io/cluster-issuer: letsencrypt-staging
       extraTls:
         - hosts:
-          - argocd-127-0-0-1.nip.io
+          - argocd-metalstack.platform-engineer.cloud
           # Based on the ingress controller used secret might be optional
           secretName: argocd-server-tls
     extensions:
@@ -69,26 +53,6 @@ argo-cd:
       contents:
         - name: argo-rollouts
           url: https://github.com/argoproj-labs/rollout-extension/releases/download/v0.3.4/extension.tar
-    metrics:
-      enabled: true
-      serviceMonitor: 
-        enabled: true     
 
   applicationSet:
     allowAnyNamespace: true
-    metrics:
-      enabled: true
-      serviceMonitor: 
-        enabled: true     
-
-  repoServer:
-    metrics:
-      enabled: true
-      serviceMonitor: 
-        enabled: true      
-
-  notifications:
-    metrics:
-      enabled: true
-      serviceMonitor: 
-        enabled: true   

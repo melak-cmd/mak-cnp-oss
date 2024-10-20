@@ -1,6 +1,6 @@
 argo-cd:
   global:
-    domain: argocd-127-0-0-1.nip.io
+    domain: argocd.lab.suxessit.k8s.cloud.uibk.ac.at
 
   configs:
     params:
@@ -45,13 +45,13 @@ argo-cd:
     metrics:
       enabled: true
       serviceMonitor: 
-        enabled: true
-     
+        enabled: true      
+
   redis:
     metrics:
       enabled: true
       serviceMonitor: 
-        enabled: true 
+        enabled: true       
 
   server:
     ingress:
@@ -59,9 +59,14 @@ argo-cd:
       annotations: 
         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
         nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+        cert.gardener.cloud/purpose: managed
+        dns.gardener.cloud/class: garden
+        dns.gardener.cloud/dnsnames: argocd.lab.suxessit.k8s.cloud.uibk.ac.at
+        dns.gardener.cloud/ttl: "180"
+      ingressClassName: nginx
       extraTls:
         - hosts:
-          - argocd-127-0-0-1.nip.io
+          - argocd.lab.suxessit.k8s.cloud.uibk.ac.at
           # Based on the ingress controller used secret might be optional
           secretName: argocd-server-tls
     extensions:
@@ -72,23 +77,23 @@ argo-cd:
     metrics:
       enabled: true
       serviceMonitor: 
-        enabled: true     
+        enabled: true      
 
   applicationSet:
     allowAnyNamespace: true
     metrics:
       enabled: true
       serviceMonitor: 
-        enabled: true     
+        enabled: true      
 
   repoServer:
     metrics:
       enabled: true
       serviceMonitor: 
-        enabled: true      
+        enabled: true     
 
   notifications:
     metrics:
       enabled: true
       serviceMonitor: 
-        enabled: true   
+        enabled: true    
