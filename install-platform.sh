@@ -26,7 +26,7 @@ else
       -p "443:443@loadbalancer" \
       --k3s-arg '--cluster-init@server:0' \
       --k3s-arg '--etcd-expose-metrics=true@server:0' \
-      --agents 2 \
+      --agents 1 \
       --wait
   fi
 fi
@@ -45,7 +45,7 @@ echo -e "${GREEN}Installing ArgoCD with Helm chart...${NC}"
 kubectl create namespace argocd
 helm template mak-argocd argo-cd \
   --repo https://argoproj.github.io/argo-helm \
-  --version 7.1.3 \
+  --version 7.6.8 \
   --namespace argocd \
   --set configs.cm.application.resourceTrackingMethod=annotation \
   -f https://raw.githubusercontent.com/${CURRENT_REPOSITORY}/${CURRENT_BRANCH}/bootstrap-argocd-values.yaml |
