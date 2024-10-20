@@ -21,14 +21,14 @@ spec:
       data:
         password: "{{ `{{ .GITHUB_TOKEN }}` }}"
         username: "{{ `{{ .GITHUB_USERNAME }}` }}"
-        repoURL: "^https://github.com/suxess-it"
+        repoURL: "^https://github.com/melak-cmd"
         repoURLIsRegex: "true"
   data:
   - secretKey: GITHUB_TOKEN
     remoteRef:
-      key: sx-cnp-oss-kv/data/demo/delivery
+      key: mak-cnp-oss-kv/data/demo/delivery
       property: GITHUB_TOKEN
   - secretKey: GITHUB_USERNAME
     remoteRef:
-      key: sx-cnp-oss-kv/data/demo/delivery
+      key: mak-cnp-oss-kv/data/demo/delivery
       property: GITHUB_USERNAME
