@@ -111,8 +111,8 @@ spec:
             - mountPath: /opt/keycloak/bin/poststart.sh
               name: keycloak-hookvolume
               subPath: poststart.sh
-            - mountPath: /tmp/sx-cnp-oss.realm.json
-              subPath: sx-cnp-oss.realm.json
+            - mountPath: /tmp/mak-cnp-oss.realm.json
+              subPath: mak-cnp-oss.realm.json
               name: keycloak-hookvolume
       volumes:
       - configMap:
