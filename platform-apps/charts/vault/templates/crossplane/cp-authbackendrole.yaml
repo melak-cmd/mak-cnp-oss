@@ -17,5 +17,5 @@ spec:
     - vault
     roleName: policy-admin
     tokenPolicies:
-    - mak-cnp-oss-vault
+    - sx-cnp-oss-vault
     tokenTtl: 60
