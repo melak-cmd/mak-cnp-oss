@@ -1,5 +1,5 @@
 apiVersion: v2
-name: sx-keycloak
+name: mak-keycloak
 description: A local k8s keycloak with postgres db
 
 # A chart can be either an 'application' or a 'library' chart.

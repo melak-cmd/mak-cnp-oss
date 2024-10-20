@@ -6,7 +6,7 @@
 #  annotations:
 #    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 #spec:
-#  providerConfigName: sx-keycloak-config
+#  providerConfigName: mak-keycloak-config
 #  providerSecretName: keycloak-credentials-cp
 #  realm: master
 #  builtinClients: 
