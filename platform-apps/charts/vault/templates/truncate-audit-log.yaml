@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: truncate-audit-sx-vault-0
+  name: truncate-audit-mak-vault-0
   namespace: vault
 spec:
   concurrencyPolicy: Allow
@@ -37,7 +37,7 @@ spec:
           volumes:
           - name: audit
             persistentVolumeClaim:
-              claimName: audit-sx-vault-0
+              claimName: audit-mak-vault-0
   schedule: '0 10 * * *'
   successfulJobsHistoryLimit: 3
   suspend: false
@@ -45,7 +45,7 @@ spec:
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: truncate-audit-sx-vault-1
+  name: truncate-audit-mak-vault-1
   namespace: vault
 spec:
   concurrencyPolicy: Allow
@@ -81,7 +81,7 @@ spec:
           volumes:
           - name: audit
             persistentVolumeClaim:
-              claimName: audit-sx-vault-1
+              claimName: audit-mak-vault-1
   schedule: '0 10 * * *'
   successfulJobsHistoryLimit: 3
   suspend: false
@@ -89,7 +89,7 @@ spec:
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: truncate-audit-sx-vault-2
+  name: truncate-audit-mak-vault-2
   namespace: vault
 spec:
   concurrencyPolicy: Allow
@@ -125,7 +125,7 @@ spec:
           volumes:
           - name: audit
             persistentVolumeClaim:
-              claimName: audit-sx-vault-2
+              claimName: audit-mak-vault-2
   schedule: '0 10 * * *'
   successfulJobsHistoryLimit: 3
   suspend: false
