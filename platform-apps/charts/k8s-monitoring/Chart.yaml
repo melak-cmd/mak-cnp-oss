@@ -1,5 +1,5 @@
 apiVersion: v2
-name: sx-k8s-monitoring
+name: mak-k8s-monitoring
 description: A Helm chart for k8s-monitoring
 
 # A chart can be either an 'application' or a 'library' chart.
