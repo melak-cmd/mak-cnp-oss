@@ -9,7 +9,7 @@ backstage:
   backstage:
     image:
       registry: ghcr.io/suxess-it
-      repository: mak-backstage
+      repository: sx-backstage
       tag: latest
     extraEnvVarsSecrets:
       - mak-cnp-secret
