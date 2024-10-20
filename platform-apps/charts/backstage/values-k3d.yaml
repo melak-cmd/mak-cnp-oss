@@ -12,7 +12,7 @@ backstage:
       repository: sx-backstage
       tag: latest
     extraEnvVarsSecrets:
-      - mak-cnp-secret
+      - sx-cnp-secret
       - manual-secret
     extraEnvVars:
       - name: NODE_OPTIONS
@@ -78,7 +78,7 @@ backstage:
         #   changeOrigin: true
         "/argocd/api":
           # use k8s internal service name because argocd-127-0-0-1.nip.io resolves to 127.0.0.1 in container, too
-          target: http://mak-argocd-server.argocd:80/api/v1/
+          target: http://sx-argocd-server.argocd:80/api/v1/
           changeOrigin: true
           secure: false
           headers:
@@ -87,7 +87,7 @@ backstage:
 
         '/grafana/api':
           # use k8s internal service name because grafana-127-0-0-1.nip.io resolves to 127.0.0.1 in container, too
-          target: http://mak-grafana.grafana:80
+          target: http://sx-grafana.grafana:80
           headers:
             Authorization: Bearer ${GRAFANA_TOKEN}
 
@@ -133,9 +133,9 @@ backstage:
           oidc:
             development:
               # real metadataUrl -> local cluster lead to "ECONNREFUSED 127.0.0.1:443" - #24935
-              #metadataUrl: https://keycloak-127-0-0-1.nip.io/realms/mak-cnp-oss #.well-known/openid-configuration can be ommited
+              #metadataUrl: https://keycloak-127-0-0-1.nip.io/realms/sx-cnp-oss #.well-known/openid-configuration can be ommited
               # workaround -> also set frontendUrl in keycloak realm
-              metadataUrl: http://keycloak-service.keycloak.svc.cluster.local:8080/realms/mak-cnp-oss #.well-known/openid-configuration can be ommited
+              metadataUrl: http://keycloak-service.keycloak.svc.cluster.local:8080/realms/sx-cnp-oss #.well-known/openid-configuration can be ommited
               callbackUrl: https://backstage-127-0-0-1.nip.io/api/auth/oidc/handler/frame
               clientId: backstage
               clientSecret: demosecret
@@ -210,15 +210,15 @@ backstage:
           - allow: [Component, System, API, Resource, Location, Template, Domain, User, Group ]
         locations:
           - type: url
-            target: https://github.com/suxess-it/mak-cnp-oss-demo-app/blob/main/catalog-info.yaml
+            target: https://github.com/suxess-it/sx-cnp-oss-demo-app/blob/main/catalog-info.yaml
           - type: url
-            target: https://github.com/suxess-it/mak-cnp-oss/blob/main/backstage-resources/templates/showcase-templates.yaml
+            target: https://github.com/suxess-it/sx-cnp-oss/blob/main/backstage-resources/templates/showcase-templates.yaml
             rules:
               - allow: [Template]
           - type: url
-            target: https://github.com/suxess-it/mak-cnp-oss/blob/main/backstage-resources/entities/all.yaml
+            target: https://github.com/suxess-it/sx-cnp-oss/blob/main/backstage-resources/entities/all.yaml
           - type: url
-            target: https://github.com/suxess-it/mak-cnp-oss/blob/main/backstage-resources/entities/k3d.yaml
+            target: https://github.com/suxess-it/sx-cnp-oss/blob/main/backstage-resources/entities/k3d.yaml
         providers:
           keycloakOrg:
             default:
@@ -226,8 +226,8 @@ backstage:
               #baseUrl: https://keycloak-127-0-0-1.nip.io
               # workaround
               baseUrl: http://keycloak-service.keycloak.svc.cluster.local:8080
-              loginRealm: mak-cnp-oss
-              realm: mak-cnp-oss
+              loginRealm: sx-cnp-oss
+              realm: sx-cnp-oss
               clientId: backstage
               clientSecret: 'demosecret'
               schedule: # Mandatory; same options as in TaskScheduleDefinition

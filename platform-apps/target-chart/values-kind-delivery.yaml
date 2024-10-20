@@ -12,12 +12,12 @@ applications:
     annotations:
       argocd.argoproj.io/sync-wave: "-7"
 
-  - name: k8s-monitoring
-    annotations:
-      argocd.argoproj.io/compare-options: ServerSideDiff=true
-      argocd.argoproj.io/sync-wave: "-6"
-    syncOptions:
-      - ServerSideApply=true
+  # - name: k8s-monitoring
+  #   annotations:
+  #     argocd.argoproj.io/compare-options: ServerSideDiff=true
+  #     argocd.argoproj.io/sync-wave: "-6"
+  #   syncOptions:
+  #     - ServerSideApply=true
 
   - name: vault
     annotations:
@@ -38,11 +38,11 @@ applications:
 
   - name: argo-rollouts
 
-  - name: keycloak
+  # - name: keycloak
 
-  - name: backstage
-    annotations:
-      argocd.argoproj.io/sync-wave: "10"
+  # - name: backstage
+  #   annotations:
+  #     argocd.argoproj.io/sync-wave: "10"
       
 
 
