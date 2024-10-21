@@ -6,7 +6,7 @@ metadata:
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
-  name: mak-{{ .name }}
+  name: sx-{{ .name }}
   namespace: argocd
   finalizers:
   - resources-finalizer.argocd.argoproj.io
