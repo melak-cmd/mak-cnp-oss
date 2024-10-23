@@ -4,7 +4,7 @@ metadata:
   name: letsencrypt-staging
 spec:
   acme:
-    email: support@suxess-it.com
+    email: amine.kawani@outlook.com
     preferredChain: ''
     privateKeySecretRef:
       name: letsencrypt-staging

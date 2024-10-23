@@ -84,7 +84,7 @@ INITIAL_ARGOCD_PASSWORD=$( kubectl get secret -n argocd argocd-initial-admin-sec
 rm argocd
 
 # create secret for scm applicationset in team app definition namespaces
-# see https://github.com/suxess-it/sx-cnp-oss/issues/214 for a sustainable solution
+# see https://github.com/melak-cmd/mak-cnp-oss/issues/214 for a sustainable solution
 #for ns in adn-team1 adn-team2 adn-team-a; do
 #  kubectl create namespace ${ns}
 #  kubectl create secret generic appset-github-token --from-literal=token=${KUBRIX_GITHUB_APPSET_TOKEN} -n ${ns}
@@ -145,7 +145,7 @@ kubectl apply -f platform-apps/charts/argocd/manual-secret/argocd-secret.yaml
 if [[ $( echo $argocd_apps | grep sx-kargo ) ]] ; then
   echo "adding special configuration for sx-kargo"
   export VAULT_HOSTNAME=$(kubectl get ingress -o jsonpath='{.items[*].spec.rules[*].host}' -n vault)
-  curl -k --header "X-Vault-Token:$(kubectl get secret -n vault vault-init -o=jsonpath='{.data.root_token}'  | base64 -d)" --request POST --data "{\"data\": {\"GITHUB_APPSET_PAT\": \"$VAULT_TOKEN\", \"GITHUB_TOKEN\": \"${KUBRIX_REPO_PASSWORD}\", \"GITHUB_USERNAME\": \"${KUBRIX_REPO_USERNAME}\"}}" https://${VAULT_HOSTNAME}/v1/sx-cnp-oss-kv/data/demo/delivery
+  curl -k --header "X-Vault-Token:$(kubectl get secret -n vault vault-init -o=jsonpath='{.data.root_token}'  | base64 -d)" --request POST --data "{\"data\": {\"GITHUB_APPSET_PAT\": \"$VAULT_TOKEN\", \"GITHUB_TOKEN\": \"${KUBRIX_REPO_PASSWORD}\", \"GITHUB_USERNAME\": \"${KUBRIX_REPO_USERNAME}\"}}" https://${VAULT_HOSTNAME}/v1/mak-cnp-oss-kv/data/demo/delivery
   sleep 10
   kubectl delete ExternalSecret github-creds -n kargo
   # check if kargo is already synced 
@@ -259,10 +259,10 @@ echo "adding special configuration for sx-backstage"
       --from-literal=APP_CONFIG_backend_cors_origin=${BACKSTAGE_CODESPACE_URL} \
       --from-literal=APP_CONFIG_auth_providers_oidc_development_callbackUrl=${BACKSTAGE_CODESPACE_URL}/api/auth/oidc/handler/frame \
       --from-literal=APP_CONFIG_auth_providers_oidc_development_clientId=backstage-codespaces \
-      --from-literal=APP_CONFIG_auth_providers_oidc_development_metadataUrl=http://keycloak-service.keycloak.svc.cluster.local:8080/realms/sx-cnp-oss-codespaces \
+      --from-literal=APP_CONFIG_auth_providers_oidc_development_metadataUrl=http://keycloak-service.keycloak.svc.cluster.local:8080/realms/mak-cnp-oss-codespaces \
       --from-literal=APP_CONFIG_auth_provider_github_development_callbackUrl=${BACKSTAGE_CODESPACE_URL}/api/auth/github/handler/frame \
-      --from-literal=APP_CONFIG_catalog_providers_keycloakOrg_default_loginRealm=sx-cnp-oss-codespaces \
-      --from-literal=APP_CONFIG_catalog_providers_keycloakOrg_default_realm=sx-cnp-oss-codespaces \
+      --from-literal=APP_CONFIG_catalog_providers_keycloakOrg_default_loginRealm=mak-cnp-oss-codespaces \
+      --from-literal=APP_CONFIG_catalog_providers_keycloakOrg_default_realm=mak-cnp-oss-codespaces \
       --from-literal=APP_CONFIG_catalog_providers_keycloakOrg_default_clientId=backstage-codespaces \
       --from-literal=APP_CONFIG_catalog_providers_keycloakOrg_default_clientSecret=demosecret
 

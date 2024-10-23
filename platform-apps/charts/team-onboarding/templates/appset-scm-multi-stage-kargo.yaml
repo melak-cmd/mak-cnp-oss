@@ -26,7 +26,7 @@ spec:
     spec:
       project: {{ .name }}-project
       sources:
-      - repoURL: https://github.com/suxess-it/sx-cnp-oss
+      - repoURL: https://github.com/melak-cmd/mak-cnp-oss
         targetRevision: HEAD
         path: team-apps/onboarding-apps-charts/multi-stage-app-with-kargo-pipeline
         helm:

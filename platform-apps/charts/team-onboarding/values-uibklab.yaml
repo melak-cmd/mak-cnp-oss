@@ -8,11 +8,11 @@ teams:
       - group: kargo.akuity.io
         kind: Project
     appOfAppsRepo:
-      repoURL: https://github.com/suxess-it/team1-apps
+      repoURL: https://github.com/melak-cmd/team1-apps
       path: uibklab-apps
       revision: main
     multiStageKargoAppSet:
-      organization: suxess-it
+      organization: melak-cmd
 
 # new team stanza for team team-a
   - name:  team-a
@@ -24,11 +24,11 @@ teams:
       - group: kargo.akuity.io
         kind: Project
     appOfAppsRepo:
-      repoURL: https://github.com/suxess-it/team-a-apps
+      repoURL: https://github.com/melak-cmd/team-a-apps
       path: uibklab-apps
       revision: main
     multiStageKargoAppSet:
-      organization: suxess-it
+      organization: melak-cmd
 
 # new team stanza for team uibklab
   - name:  uibklab
@@ -40,8 +40,8 @@ teams:
       - group: kargo.akuity.io
         kind: Project
     appOfAppsRepo:
-      repoURL: https://github.com/suxess-it/uibklab-apps
+      repoURL: https://github.com/melak-cmd/uibklab-apps
       path: uibklab-apps
       revision: main
     multiStageKargoAppSet:
-      organization: suxess-it
+      organization: melak-cmd

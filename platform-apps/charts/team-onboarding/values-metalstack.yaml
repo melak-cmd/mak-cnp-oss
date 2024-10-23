@@ -11,11 +11,11 @@ teams:
       - group: kargo.akuity.io
         kind: Project
     appOfAppsRepo:
-      repoURL: https://github.com/suxess-it/team1-apps
+      repoURL: https://github.com/melak-cmd/team1-apps
       path: metalstack-apps
       revision: main
     multiStageKargoAppSet:
-      organization: suxess-it
+      organization: melak-cmd
   - name: team2
     sourceRepos:
       - '*'
@@ -25,7 +25,7 @@ teams:
       - group: kargo.akuity.io
         kind: Project
     appOfAppsRepo:
-      repoURL: https://github.com/suxess-it/team2-apps
+      repoURL: https://github.com/melak-cmd/team2-apps
       path: metalstack-apps
       revision: main
     # in the future maybe also some attributes for an scm / git application-set instead of appOfApps possible
