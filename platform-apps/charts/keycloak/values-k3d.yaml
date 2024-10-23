@@ -85,7 +85,7 @@ deployments:
             - phac
             - jokl
             - demouser
-        - name: backstage-admin # for service-account permission workaround      
+        - name: backstage-admin # for service-account permission workaround
     # backstage client
     backstageclient:
       config:
