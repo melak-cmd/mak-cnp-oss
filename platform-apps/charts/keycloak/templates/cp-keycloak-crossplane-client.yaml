@@ -22,17 +22,17 @@ spec:
     clientId: {{ .Values.deployments.keycloak.crossplaneclient.config.clientID }}
     name: {{ .Values.deployments.keycloak.crossplaneclient.config.clientID }}
     realmId: master
-    adminUrl: "https://grafana{{ .Values.deployments.ingress.fqdn }}"
-    rootUrl: "https://grafana{{ .Values.deployments.ingress.fqdn }}"
+    adminUrl: "/"
+    rootUrl: "/"
     webOrigins: 
-      - "https://grafana{{ .Values.deployments.ingress.fqdn }}"
+      - "*"
     directAccessGrantsEnabled: true
     standardFlowEnabled: true
     serviceAccountsEnabled: false
 #    managementPolicies: ["Observe"]
     validRedirectUris:
  #     - "http://grafana{{ .Values.deployments.ingress.fqdn }}:3000/login/generic_oauth"
-      - "https://grafana{{ .Values.deployments.ingress.fqdn }}/login/generic_oauth"
+      - "/"
     clientSecretSecretRef:
       key: {{ .Values.deployments.keycloak.crossplaneclient.config.clientID }}
       name: "{{ .Release.Name }}-client-{{ .Values.deployments.keycloak.crossplaneclient.config.clientID }}-password"
