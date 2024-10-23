@@ -86,6 +86,11 @@ deployments:
             - jokl
             - demouser
         - name: backstage-admin # for service-account permission workaround
+    # crossplane client
+    crossplaneclient:
+      config:
+        clientID: crossplane
+        clientSecret: demosecret        
     # backstage client
     backstageclient:
       config:
