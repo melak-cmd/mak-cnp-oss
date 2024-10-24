@@ -11,7 +11,7 @@ env | grep KUBRIX
 # Get the hostname of the local machine and convert it to lowercase
 CLUSTER_NAME="$(hostname | tr '[:upper:]' '[:lower:]')"
 
-k3d cluster delete $CLUSTER_NAME || true
+# k3d cluster delete $CLUSTER_NAME || true
 
 if [ "${KUBRIX_CREATE_K3D_CLUSTER}" = "true" ] ; then
   if ! k3d cluster list | grep -q "$CLUSTER_NAME"; then
@@ -24,6 +24,7 @@ if [ "${KUBRIX_CREATE_K3D_CLUSTER}" = "true" ] ; then
       -p "443:443@loadbalancer" \
       --k3s-arg '--cluster-init@server:0' \
       --k3s-arg '--etcd-expose-metrics=true@server:0' \
+      --k3s-arg '--disable=traefik@server:0' \
       --agents 2 \
       --wait
     sleep 5
@@ -49,11 +50,17 @@ while true; do
 done
 
 if [[ "${KUBRIX_TARGET_TYPE}" =~ ^KIND.* ]] ; then
-  NAMESPACES="backstage kargo grafana argocd keycloak komoplane kubecost falco minio velero velero-ui vault"
+  NAMESPACES="traefik backstage kargo grafana argocd keycloak komoplane kubecost falco minio velero velero-ui vault"
   for namespace in $NAMESPACES; do
-    kubectl create namespace "$namespace" --dry-run=client -o yaml | kubectl apply -f -
+    # Using kubectl create instead of apply to avoid last-applied annotation
+    kubectl create namespace "$namespace" --dry-run=client -o yaml | kubectl create -f - 2>/dev/null || true
   done
 fi
+
+helm template sx-traefik traefik \
+  --repo https://helm.traefik.io/traefik \
+  --namespace traefik \
+  | kubectl create -f - 2>/dev/null
 
 exit
 
