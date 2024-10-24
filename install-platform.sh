@@ -1,33 +1,59 @@
 #!/bin/bash
+set -euo pipefail
 
-set -x
+# Color definitions
+GREEN='\033[0;32m'
+NC='\033[0m'
 
-# dump all kubrix variables
+# Dump all kubrix variables
 env | grep KUBRIX
 
 # Get the hostname of the local machine and convert it to lowercase
 CLUSTER_NAME="$(hostname | tr '[:upper:]' '[:lower:]')"
 
-if [ "${KUBRIX_CREATE_K3D_CLUSTER}" == true ] ; then
-  # do we need to set this always? I had DNS issues on the train
-  export K3D_FIX_DNS=1
-  k3d cluster create "$CLUSTER_NAME"  \
-    -p "80:80@loadbalancer" \
-    -p "443:443@loadbalancer" \
-    --k3s-arg '--cluster-init@server:0' \
-    --k3s-arg '--etcd-expose-metrics=true@server:0' \
-    --agents 2 \
-    --wait
+k3d cluster delete $CLUSTER_NAME || true
+
+if [ "${KUBRIX_CREATE_K3D_CLUSTER}" = "true" ] ; then
+  if ! k3d cluster list | grep -q "$CLUSTER_NAME"; then
+    # Set DNS fix if needed
+    export K3D_FIX_DNS=1
+
+    # Create the K3D cluster
+    k3d cluster create "$CLUSTER_NAME" \
+      -p "80:80@loadbalancer" \
+      -p "443:443@loadbalancer" \
+      --k3s-arg '--cluster-init@server:0' \
+      --k3s-arg '--etcd-expose-metrics=true@server:0' \
+      --agents 2 \
+      --wait
+    sleep 5
+  else
+    echo "Cluster $CLUSTER_NAME already exists."
+  fi
 fi
 
-sleep 1
+# Check for pending pods in kube-system namespace
+echo -e "${GREEN}Checking for pending pods in the kube-system namespace...${NC}"
 
-# Wait for the kube-dns pod to be ready
-echo -e "${GREEN}Waiting for kube-dns pod to be ready...${NC}"
-kubectl wait --namespace kube-system \
-  --for=condition=ready pod \
-  --selector=k8s-app=kube-dns \
-  --timeout=90s
+while true; do
+  PODS=$(kubectl get pods --namespace kube-system --field-selector=status.phase=Pending -o wide)
+  
+  if [[ -z "$PODS" || "$PODS" == *"No resources found"* ]]; then
+    echo "No pending pods found - cluster is ready."
+    break
+  else
+    echo "Waiting for pods to be ready:"
+    echo "$PODS"
+  fi
+  sleep 5
+done
+
+if [[ "${KUBRIX_TARGET_TYPE}" =~ ^KIND.* ]] ; then
+  NAMESPACES="backstage kargo grafana argocd keycloak komoplane kubecost falco minio velero velero-ui vault"
+  for namespace in $NAMESPACES; do
+    kubectl create namespace "$namespace" --dry-run=client -o yaml | kubectl apply -f -
+  done
+fi
 
 exit
 
