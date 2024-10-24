@@ -1,2 +1,3 @@
 local-installation.md
+*.env
 platform-apps/charts/*/charts/*.tgz

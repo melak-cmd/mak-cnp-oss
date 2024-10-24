@@ -1,7 +1,0 @@
-{{- range .Values.teams }}
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: adn-{{ .name }}
----
-{{- end }}

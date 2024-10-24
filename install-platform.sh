@@ -5,11 +5,13 @@ set -x
 # dump all kubrix variables
 env | grep KUBRIX
 
+# Get the hostname of the local machine and convert it to lowercase
+CLUSTER_NAME="$(hostname | tr '[:upper:]' '[:lower:]')"
+
 if [ "${KUBRIX_CREATE_K3D_CLUSTER}" == true ] ; then
   # do we need to set this always? I had DNS issues on the train
   export K3D_FIX_DNS=1
-  
-  k3d cluster create kubrix-local-demo \
+  k3d cluster create "$CLUSTER_NAME"  \
     -p "80:80@loadbalancer" \
     -p "443:443@loadbalancer" \
     --k3s-arg '--cluster-init@server:0' \
@@ -17,6 +19,17 @@ if [ "${KUBRIX_CREATE_K3D_CLUSTER}" == true ] ; then
     --agents 2 \
     --wait
 fi
+
+sleep 1
+
+# Wait for the kube-dns pod to be ready
+echo -e "${GREEN}Waiting for kube-dns pod to be ready...${NC}"
+kubectl wait --namespace kube-system \
+  --for=condition=ready pod \
+  --selector=k8s-app=kube-dns \
+  --timeout=90s
+
+exit
 
 if [[ "${KUBRIX_TARGET_TYPE}" =~ ^KIND.* ]] ; then
   # create mkcert certs in alle namespaces with ingress
@@ -84,7 +97,7 @@ INITIAL_ARGOCD_PASSWORD=$( kubectl get secret -n argocd argocd-initial-admin-sec
 rm argocd
 
 # create secret for scm applicationset in team app definition namespaces
-# see https://github.com/melak-cmd/mak-cnp-oss/issues/214 for a sustainable solution
+# see https://github.com/suxess-it/sx-cnp-oss/issues/214 for a sustainable solution
 #for ns in adn-team1 adn-team2 adn-team-a; do
 #  kubectl create namespace ${ns}
 #  kubectl create secret generic appset-github-token --from-literal=token=${KUBRIX_GITHUB_APPSET_TOKEN} -n ${ns}
