@@ -67,12 +67,6 @@ if [[ "${KUBRIX_TARGET_TYPE}" =~ ^KIND.* ]] ; then
   done
 fi
 
-helm template traefik traefik \
-  --repo https://helm.traefik.io/traefik \
-  --namespace traefik \
-  -f bootstrap-traefik-values.yaml \
-  | kubectl apply -f - 
-
 helm template sx-argocd argo-cd \
   --repo https://argoproj.github.io/argo-helm \
   --namespace argocd \
