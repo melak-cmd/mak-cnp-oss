@@ -52,15 +52,31 @@ done
 if [[ "${KUBRIX_TARGET_TYPE}" =~ ^KIND.* ]] ; then
   NAMESPACES="traefik backstage kargo grafana argocd keycloak komoplane kubecost falco minio velero velero-ui vault"
   for namespace in $NAMESPACES; do
+    mkcert -cert-file ${namespace}-cert.pem -key-file ${namespace}-key.pem ${namespace}-127-0-0-1.nip.io 
     # Using kubectl create instead of apply to avoid last-applied annotation
-    kubectl create namespace "$namespace" --dry-run=client -o yaml | kubectl create -f - 2>/dev/null || true
+    kubectl create namespace "$namespace" --dry-run=client -o yaml | kubectl apply -f -
+    # # kargo needs a special secret name according to its helm chart
+    if [ "${namespace}" = "kargo" ]; then
+      kubectl delete secret kargo-api-ingress-cert -n ${namespace} --ignore-not-found=true
+      kubectl create secret tls kargo-api-ingress-cert -n ${namespace} --cert=${namespace}-cert.pem --key=${namespace}-key.pem 
+    else
+      kubectl delete secret ${namespace}-server-tls -n ${namespace} --ignore-not-found=true
+      kubectl create secret tls ${namespace}-server-tls -n ${namespace} --cert=${namespace}-cert.pem --key=${namespace}-key.pem
+    fi
+    rm ${namespace}-cert.pem ${namespace}-key.pem
   done
 fi
 
 helm template sx-traefik traefik \
   --repo https://helm.traefik.io/traefik \
   --namespace traefik \
-  | kubectl create -f - 2>/dev/null
+  | kubectl create -f - 
+
+helm template sx-argocd argo-cd \
+  --repo https://argoproj.github.io/argo-helm \
+  --namespace argocd \
+  --set configs.cm.application.resourceTrackingMethod=annotation \
+  | kubectl create -f - 
 
 exit
 
