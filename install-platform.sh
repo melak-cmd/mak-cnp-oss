@@ -67,16 +67,18 @@ if [[ "${KUBRIX_TARGET_TYPE}" =~ ^KIND.* ]] ; then
   done
 fi
 
-helm template sx-traefik traefik \
+helm template traefik traefik \
   --repo https://helm.traefik.io/traefik \
   --namespace traefik \
-  | kubectl create -f - 
+  -f bootstrap-traefik-values.yaml \
+  | kubectl apply -f - 
 
 helm template sx-argocd argo-cd \
   --repo https://argoproj.github.io/argo-helm \
   --namespace argocd \
   --set configs.cm.application.resourceTrackingMethod=annotation \
-  | kubectl create -f - 
+  -f bootstrap-argocd-values.yaml \
+  | kubectl apply -f - 
 
 exit
 
