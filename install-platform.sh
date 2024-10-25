@@ -101,3 +101,10 @@ KUBRIX_REPO_SED=$( echo ${KUBRIX_REPO} | sed 's/\//\\\//g' )
 
 # bootstrap-app
 cat bootstrap-app-$(echo ${KUBRIX_TARGET_TYPE} | awk '{print tolower($0)}').yaml | sed "s/targetRevision:.*/targetRevision: ${KUBRIX_REPO_BRANCH_SED}/g" | sed "s/repoURL:.*/repoURL: ${KUBRIX_REPO_SED}/g" | kubectl apply -n argocd -f -
+
+# create app list
+target_chart_value_file="platform-apps/target-chart/values-$(echo ${KUBRIX_TARGET_TYPE} | awk '{print tolower($0)}').yaml"
+
+argocd_apps=$(cat $target_chart_value_file | awk '/^  - name:/ { printf "%s", "sx-"$3" "}' )
+# list apps which need some sort of special treatment in bootstrap
+argocd_apps_without_individual=$(cat $target_chart_value_file | egrep -Ev "backstage|kargo" | awk '/^  - name:/ { printf "%s", "sx-"$3" "}' )
