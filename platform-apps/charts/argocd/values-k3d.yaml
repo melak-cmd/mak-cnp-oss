@@ -36,22 +36,22 @@ argo-cd:
         p, backstage, applications, get, */*, allow
 
   controller:
-    # metrics:
-    #   enabled: true
-    #   serviceMonitor: 
-    #     enabled: true     
+    metrics:
+      enabled: true
+      serviceMonitor: 
+        enabled: true     
 
   dex:
-    # metrics:
-    #   enabled: true
-    #   serviceMonitor: 
-    #     enabled: true
+    metrics:
+      enabled: true
+      serviceMonitor: 
+        enabled: true
      
   redis:
-    # metrics:
-    #   enabled: true
-    #   serviceMonitor: 
-    #     enabled: true 
+    metrics:
+      enabled: true
+      serviceMonitor: 
+        enabled: true 
 
   server:
     ingress:
@@ -69,26 +69,26 @@ argo-cd:
       contents:
         - name: argo-rollouts
           url: https://github.com/argoproj-labs/rollout-extension/releases/download/v0.3.6/extension.tar
-    # metrics:
-    #   enabled: true
-    #   serviceMonitor: 
-    #     enabled: true     
+    metrics:
+      enabled: true
+      serviceMonitor: 
+        enabled: true     
 
   applicationSet:
     allowAnyNamespace: true
-    # metrics:
-    #   enabled: true
-    #   serviceMonitor: 
-    #     enabled: true     
+    metrics:
+      enabled: true
+      serviceMonitor: 
+        enabled: true     
 
   repoServer:
-    # metrics:
-    #   enabled: true
-    #   serviceMonitor: 
-    #     enabled: true      
+    metrics:
+      enabled: true
+      serviceMonitor: 
+        enabled: true      
 
   notifications:
-    # metrics:
-    #   enabled: true
-    #   serviceMonitor: 
-    #     enabled: true   
+    metrics:
+      enabled: true
+      serviceMonitor: 
+        enabled: true   
