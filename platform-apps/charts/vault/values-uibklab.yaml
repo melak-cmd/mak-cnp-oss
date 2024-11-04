@@ -1,10 +1,10 @@
 eso:
-  providerUrl: "http://sx-vault-active.vault.svc.cluster.local:8200"
+  providerUrl: "https://vault.lab.suxessit.k8s.cloud.uibk.ac.at/"
   backendName: vault-backend
   secretStore: sx-cnp-oss-kv
   # oidc config
-  oidcDiscoveryUrl: https://keycloak-127-0-0-1.nip.io/realms/sx-cnp-oss
-  callbackUri: "https://vault-127-0-0-1.nip.io"
+  oidcDiscoveryUrl: "https://keycloak.lab.suxessit.k8s.cloud.uibk.ac.at/realms/sx-cnp-oss"
+  callbackUri: "https://vault.lab.suxessit.k8s.cloud.uibk.ac.at"
 
   # Copyright (c) HashiCorp, Inc.
   # SPDX-License-Identifier: MPL-2.0
@@ -14,13 +14,19 @@ vault:
   server:
     ingress:
       enabled: true
+      ingressClassName: nginx
+      annotations:
+        cert.gardener.cloud/purpose: managed
+        dns.gardener.cloud/class: garden
+        dns.gardener.cloud/dnsnames: vault.lab.suxessit.k8s.cloud.uibk.ac.at
+        dns.gardener.cloud/ttl: "180"      
       hosts:
-        - host: vault-127-0-0-1.nip.io
+        - host: vault.lab.suxessit.k8s.cloud.uibk.ac.at
           paths: []
       tls: 
         - secretName: vault-server-tls
           hosts:
-            - vault-127-0-0-1.nip.io
+            - vault.lab.suxessit.k8s.cloud.uibk.ac.at
     extraInitContainers:
       - name: utility-downloader
         image: alpine/curl:latest
@@ -167,13 +173,6 @@ vault:
                   vault write auth/kubernetes/role/crossplane bound_service_account_names="*" bound_service_account_namespaces=crossplane policies=crossplane ttl=24h        
 
                 else 
-
-                # due to #405
-                  if [ ! $(vault read auth/oidc/config) ]; then
-                    vault auth enable oidc
-                    vault write auth/oidc/config oidc_discovery_url="https://keycloak-127-0-0-1.nip.io/realms/sx-cnp-oss" oidc_client_id="vault" oidc_client_secret="demosecret" default_role="default" oidc_discovery_ca_pem=@/vault/userconfig/vault-ca/ca.crt
-                  fi
-
                   # workaround due to #422
                   if [ ! $(vault list identity/group-alias/id) ]; then
                     echo vault admins group configured, just updating group aliases
@@ -207,9 +206,6 @@ vault:
             mountPath: /vault-root-token
           - name: plugins
             mountPath: /usr/local/libexec/vault
-          - mountPath: /vault/userconfig/vault-ca
-            name: vault-ca-cert
-            readOnly: true 
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
@@ -217,8 +213,6 @@ vault:
             - ALL
           privileged: false
           runAsNonRoot: true
-    extraEnvironmentVars:
-      VAULT_CACERT: /vault/userconfig/vault-ca/ca.crt
     volumes:
       - name: plugins
         emptyDir: {}
@@ -226,26 +220,20 @@ vault:
         secret:
           secretName: vault-init
           optional: true 
-      - name: vault-ca-cert
-        secret:
-          defaultMode: 420
-          secretName: ca-cert
+
     volumeMounts:
       - mountPath: /usr/local/libexec/vault
         name: plugins
         readOnly: false 
-      - mountPath: /vault/userconfig/vault-ca
-        name: vault-ca-cert
-        readOnly: true 
     dataStorage:
       size: 1Gi
     auditStorage:
       enabled: true
-      size: 1Gi
+      size: 5Gi
     affinity: null
     ha:
       enabled: true
-      replicas: 1
+      replicas: 3
       raft:
         enabled: true
         setNodeId: true
@@ -277,8 +265,8 @@ vault:
           
           service_registration "kubernetes" {}
           plugin_directory = "/usr/local/libexec/vault"
-  # serverTelemetry:
-  #   serviceMonitor:
-  #     enabled: true
-  # prometheusRules:
-  #   enabled: true
+  serverTelemetry:
+    serviceMonitor:
+      enabled: true
+  prometheusRules:
+    enabled: true
