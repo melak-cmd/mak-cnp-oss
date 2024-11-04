@@ -8,10 +8,7 @@ platform-apps/charts/vault/templates/crossplane/cp-authbackendrole.yaml
 platform-apps/charts/vault/templates/crossplane/cp-group-sx-cnp-oss.yaml
 platform-apps/charts/vault/templates/crossplane/cp-kv2-demosecretjson.yaml
 platform-apps/charts/vault/templates/crossplane/cp-pol-sx-cnp-oss.yaml
-platform-apps/charts/vault/templates/crossplane/cp-provider.yaml
-platform-apps/charts/vault/templates/crossplane/cp-providerconfig.yaml
 platform-apps/charts/vault/templates/crossplane/cp-secret-kv2.yaml
 platform-apps/charts/vault/templates/crossplane/cp-secretv2.yaml
-platform-apps/charts/vault/templates/truncate-audit-log.yaml
 platform-apps/charts/vault/templates/vault-dashboard.yaml
 platform-apps/charts/vault/dashboard-files/vault-dashboard.json
