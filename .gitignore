@@ -1,7 +1,6 @@
 local-installation.md
 *.env
 platform-apps/charts/*/charts/*.tgz
-platform-apps/charts/vault/templates/eso/clustersecretstore.yaml
 platform-apps/charts/vault/templates/crossplane/cp-audit.yaml
 platform-apps/charts/vault/templates/crossplane/cp-authbackend-oidc-demosecret.yaml
 platform-apps/charts/vault/templates/crossplane/cp-authbackend-oidc.yaml
