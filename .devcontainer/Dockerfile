@@ -1,1 +1,0 @@
-FROM quay.io/akuity/argo-cd-learning-assets/akuity-devcontainer:0.2.5
