@@ -1,0 +1,28 @@
+{
+    "name": "delivery",
+    "build":{
+        "dockerfile": "../Dockerfile"
+    },
+    "features": {
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {
+            "enableNonRootDocker": "true",
+            "moby":"true"
+        }
+    },
+    "hostRequirements": {
+        "cpus": 4
+    },
+    "postAttachCommand": "",
+    "postCreateCommand": "",
+    "postStartCommand": "",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "redhat.vscode-yaml",
+                "ivangabriele.vscode-git-add-and-commit",
+                "streetsidesoftware.code-spell-checker",
+				"streetsidesoftware.code-spell-checker-british-english"
+            ]
+        }
+    }
+}
