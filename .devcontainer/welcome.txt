@@ -1,0 +1,4 @@
+Hello to the CNP codespace!
+
+The CNP delivery platform-stack will get installed now.
+This can take up to 20 minutes - please be patient ;)
