@@ -24,6 +24,8 @@
 	// Use 'postCreateCommand' to run commands after the container is created.
 	"postCreateCommand": "sudo cp .devcontainer/welcome.txt /usr/local/etc/vscode-dev-containers/first-run-notice.txt",
 
+	"postStartCommand": "export CNP_TARGET_TYPE=delivery ; export CNP_CLUSTER_TYPE=kind ; /bin/bash -c .devcontainer/install-cnp.sh",
+
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
