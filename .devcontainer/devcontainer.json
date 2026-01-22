@@ -26,6 +26,8 @@
 
 	"postStartCommand": "export CNP_TARGET_TYPE=delivery ; export CNP_CLUSTER_TYPE=kind ; /bin/bash -c .devcontainer/install-cnp.sh",
 
+	"forwardPorts": [6688, 6689,6691,6692],
+
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
